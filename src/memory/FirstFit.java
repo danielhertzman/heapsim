@@ -33,8 +33,8 @@ public class FirstFit extends Memory {
 	@Override
 	public Pointer alloc(int size) {
 		// TODO Implement this!
-		
-		
+
+
 		return null;
 	}
 	
