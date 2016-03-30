@@ -9,6 +9,7 @@ package memory;
  * @since 1.0
  */
 public class Pointer {
+
 	private int address;
 	private RawMemory memory;
 	

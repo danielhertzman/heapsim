@@ -8,6 +8,7 @@ package memory;
  * @since 1.0
  */
 class RawMemory {
+
 	protected int[] cells;
 	
 	/**

@@ -1,5 +1,7 @@
 package memory;
 
+import java.util.LinkedList;
+
 /**
  * This memory model allocates memory cells based on the first-fit method. 
  * 
@@ -8,6 +10,7 @@ package memory;
  */
 public class FirstFit extends Memory {
 
+	private LinkedList<Pointer> freeList = new LinkedList<>();
 	/**
 	 * Initializes an instance of a first fit-based memory.
 	 * 
@@ -16,6 +19,9 @@ public class FirstFit extends Memory {
 	public FirstFit(int size) {
 		super(size);
 		// TODO Implement this!
+		Pointer startPointer = new Pointer(this);
+		freeList.push(startPointer);
+
 	}
 
 	/**
@@ -27,6 +33,8 @@ public class FirstFit extends Memory {
 	@Override
 	public Pointer alloc(int size) {
 		// TODO Implement this!
+		
+		
 		return null;
 	}
 	
@@ -51,12 +59,7 @@ public class FirstFit extends Memory {
 	@Override
 	public void printLayout() {
 		// TODO Implement this!
+		freeList.forEach(pointer -> System.out.println(pointer.read(pointer.pointsAt())));
 	}
-	
-	/**
-	 * Compacts the memory space.
-	 */
-	public void compact() {
-		// TODO Implement this!
-	}
+
 }

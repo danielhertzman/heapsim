@@ -92,8 +92,4 @@ public class ComplexBatch {
 		
 		m.printLayout();
 	}
-
-	public static void main(String[] args) {
-		System.out.println("hello");
-	}
 }
