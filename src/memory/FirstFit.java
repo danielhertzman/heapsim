@@ -2,6 +2,17 @@ package memory;
 
 import java.util.LinkedList;
 
+class Segment{
+
+	int size;
+	Pointer pointer;
+
+	public Segment(int size, Pointer pointer){
+		this.size = size;
+		this.pointer = pointer;
+	}
+}
+
 /**
  * This memory model allocates memory cells based on the first-fit method. 
  * 
@@ -10,7 +21,7 @@ import java.util.LinkedList;
  */
 public class FirstFit extends Memory {
 
-	private LinkedList<Pointer> freeList = new LinkedList<>();
+	private LinkedList<Segment> freeList = new LinkedList<>();
 	/**
 	 * Initializes an instance of a first fit-based memory.
 	 * 
@@ -19,21 +30,33 @@ public class FirstFit extends Memory {
 	public FirstFit(int size) {
 		super(size);
 		// TODO Implement this!
-		Pointer startPointer = new Pointer(this);
-		freeList.push(startPointer);
-
+		Segment baseSegment = new Segment(size, new Pointer(this));
+		freeList.push(baseSegment);
 	}
 
 	/**
 	 * Allocates a number of memory cells. 
 	 * 
-	 * @param size the number of cells to allocate.
+	 * @param allocSize the number of cells to allocate.
 	 * @return The address of the first cell.
 	 */
 	@Override
-	public Pointer alloc(int size) {
+	public Pointer alloc(int allocSize) {
 		// TODO Implement this!
 
+		for (Segment segment : freeList){
+
+			if (segment.size > allocSize){
+
+				int oldStartSegmentAdress = segment.pointer.pointsAt();
+				Pointer allocPointer = new Pointer(oldStartSegmentAdress, this);
+
+				segment.pointer.pointAt(oldStartSegmentAdress + allocSize);
+				segment.size = segment.size - allocSize;
+
+				return allocPointer; // return pointer pointing at old free segment start
+			}
+		}
 
 		return null;
 	}
@@ -59,7 +82,9 @@ public class FirstFit extends Memory {
 	@Override
 	public void printLayout() {
 		// TODO Implement this!
-		freeList.forEach(pointer -> System.out.println(pointer.read(pointer.pointsAt())));
+		freeList.forEach(segment -> System.out.println("Free Memory: " +
+				segment.pointer.pointsAt() + " - " + (segment.pointer.pointsAt() + segment.size)));
+
 	}
 
 }
