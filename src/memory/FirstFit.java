@@ -1,6 +1,8 @@
 package memory;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 class Segment{
 
@@ -22,6 +24,8 @@ class Segment{
 public class FirstFit extends Memory {
 
 	private LinkedList<Segment> freeList = new LinkedList<>();
+	private HashMap<Pointer, Integer> allocatedSegments = new HashMap<>();
+
 	/**
 	 * Initializes an instance of a first fit-based memory.
 	 * 
@@ -46,10 +50,11 @@ public class FirstFit extends Memory {
 
 		for (Segment segment : freeList){
 
-			if (segment.size > allocSize){
+			if (segment.size >= allocSize){
 
 				int oldStartSegmentAdress = segment.pointer.pointsAt();
 				Pointer allocPointer = new Pointer(oldStartSegmentAdress, this);
+				allocatedSegments.put(allocPointer, allocSize);
 
 				segment.pointer.pointAt(oldStartSegmentAdress + allocSize);
 				segment.size = segment.size - allocSize;
@@ -69,6 +74,17 @@ public class FirstFit extends Memory {
 	@Override
 	public void release(Pointer p) {
 		// TODO Implement this!
+
+		//Push segment to freeList
+		int size = allocatedSegments.get(p);
+		Segment releaseSegment = new Segment(size, p);
+		freeList.push(releaseSegment);
+		allocatedSegments.remove(p);
+
+		//overwrite old values in memory with zeros
+		int[] zeros = new int[size];
+		write(p.pointsAt(), zeros);
+
 	}
 	
 	/**
