@@ -89,10 +89,10 @@ public class ComplexBatch {
 		m.release(ps[13]);
 		System.out.println("ELEVEN");m.printLayout();//70-95, 800-1000, 430-445, 350-355, 345-350, 95-100, 765-800
 		m.release(ps[12]);
-		System.out.println("TWELV");m.printLayout();//395-430, 70-95, 800-1000, 430-445, 350-355, 345-350, 95-100, 765-800
+		System.out.println("TWELVE");m.printLayout();//395-430, 70-95, 800-1000, 430-445, 350-355, 345-350, 95-100, 765-800
 
 		ps[16] = m.alloc(170);
-		System.out.println("THIRDTEEN");m.printLayout();
+		System.out.println("THIRTEEN");m.printLayout();
 		ps[16].write(range(10001, 10170));//395-430, 70-95, 970-1000, 430-445, 350-355, 345-350, 95-100, 765-800
 		System.out.println("");m.printLayout();
 		/*try {
