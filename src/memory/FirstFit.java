@@ -51,9 +51,9 @@ public class FirstFit extends Memory {
 
 		try {
 
-			for (Segment segment : freeList){
+			for (Segment segment : freeList) {
 
-				if (segment.size >= allocSize){
+				if (segment.size >= allocSize) {
 
 					int oldStartSegmentAdress = segment.pointer.pointsAt();
 					Pointer allocPointer = new Pointer(oldStartSegmentAdress, this);
@@ -66,7 +66,7 @@ public class FirstFit extends Memory {
 					return allocPointer; // return pointer pointing at the start of the old free segment.
 				}
 			}
-		}finally {
+		} finally {
 			removeZeroSegments();
 		}
 
