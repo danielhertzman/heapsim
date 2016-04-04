@@ -1,6 +1,19 @@
 package memory;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
+
+class Segment{
+
+	int size;
+	Pointer pointer;
+
+	public Segment(int size, Pointer pointer){
+		this.size = size;
+		this.pointer = pointer;
+	}
+}
 
 /**
  * This memory model allocates memory cells based on the first-fit method. 
@@ -10,7 +23,9 @@ import java.util.LinkedList;
  */
 public class FirstFit extends Memory {
 
-	private LinkedList<Pointer> freeList = new LinkedList<>();
+	private LinkedList<Segment> freeList = new LinkedList<>();
+	private HashMap<Pointer, Integer> allocatedSegments = new HashMap<>();
+
 	/**
 	 * Initializes an instance of a first fit-based memory.
 	 * 
@@ -19,26 +34,40 @@ public class FirstFit extends Memory {
 	public FirstFit(int size) {
 		super(size);
 		// TODO Implement this!
-		Pointer startPointer = new Pointer(this);
-		freeList.push(startPointer);
-
+		Segment baseSegment = new Segment(size, new Pointer(this));
+		freeList.push(baseSegment);
 	}
 
 	/**
 	 * Allocates a number of memory cells. 
 	 * 
-	 * @param size the number of cells to allocate.
+	 * @param allocSize the number of cells to allocate.
 	 * @return The address of the first cell.
 	 */
 	@Override
-	public Pointer alloc(int size) {
+	public Pointer alloc(int allocSize) {
 		// TODO Implement this!
 
+<<<<<<< HEAD
 		int currentAdress = 0;
 
 		for (Pointer p : freeList) {
 			if ((p.pointsAt() - currentAdress) > size) {
 				return newPointer(currentAdress, size);
+=======
+		for (Segment segment : freeList){
+
+			if (segment.size >= allocSize){
+
+				int oldStartSegmentAdress = segment.pointer.pointsAt();
+				Pointer allocPointer = new Pointer(oldStartSegmentAdress, this);
+				allocatedSegments.put(allocPointer, allocSize);
+
+				segment.pointer.pointAt(oldStartSegmentAdress + allocSize);
+				segment.size = segment.size - allocSize;
+
+				return allocPointer; // return pointer pointing at old free segment start
+>>>>>>> f94f1a928cdd94eb44d8441a91f76e3ed4e71e3f
 			}
 		}
 
@@ -53,6 +82,17 @@ public class FirstFit extends Memory {
 	@Override
 	public void release(Pointer p) {
 		// TODO Implement this!
+
+		//Push segment to freeList
+		int size = allocatedSegments.get(p);
+		Segment releaseSegment = new Segment(size, p);
+		freeList.push(releaseSegment);
+		allocatedSegments.remove(p);
+
+		//overwrite old values in memory with zeros
+		int[] zeros = new int[size];
+		write(p.pointsAt(), zeros);
+
 	}
 	
 	/**
@@ -66,7 +106,9 @@ public class FirstFit extends Memory {
 	@Override
 	public void printLayout() {
 		// TODO Implement this!
-		freeList.forEach(pointer -> System.out.println(pointer.read(pointer.pointsAt())));
+		freeList.forEach(segment -> System.out.println("Free Memory: " +
+				segment.pointer.pointsAt() + " - " + (segment.pointer.pointsAt() + segment.size)));
+
 	}
 
 	/**

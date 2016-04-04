@@ -61,9 +61,9 @@ class RawMemory {
 		StringBuffer sb = new StringBuffer();
 		
 		for (int data : cells) {
-			sb.append(data + "\n");
+			sb.append("|" + data);
 		}
-		
+		sb.append("|");
 		return sb.toString();
 	}
 }
