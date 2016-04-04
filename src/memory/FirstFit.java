@@ -39,7 +39,8 @@ public class FirstFit extends Memory {
 	}
 
 	/**
-	 * Allocates a number of memory cells. 
+	 * Allocates a number of memory cells.
+	 * freeList will shrink for every allocation.
 	 * 
 	 * @param allocSize the number of cells to allocate.
 	 * @return The address of the first cell.
@@ -48,27 +49,34 @@ public class FirstFit extends Memory {
 	public Pointer alloc(int allocSize) {
 		// TODO Implement this!
 
-		for (Segment segment : freeList){
+		try {
 
-			if (segment.size >= allocSize){
+			for (Segment segment : freeList){
 
-				int oldStartSegmentAdress = segment.pointer.pointsAt();
-				Pointer allocPointer = new Pointer(oldStartSegmentAdress, this);
-				allocatedSegments.put(allocPointer, allocSize);
+				if (segment.size >= allocSize){
 
-				segment.pointer.pointAt(oldStartSegmentAdress + allocSize);
-				segment.size = segment.size - allocSize;
+					int oldStartSegmentAdress = segment.pointer.pointsAt();
+					Pointer allocPointer = new Pointer(oldStartSegmentAdress, this);
 
-				return allocPointer; // return pointer pointing at old free segment start
+					allocatedSegments.put(allocPointer, allocSize);
+
+					segment.pointer.pointAt(oldStartSegmentAdress + allocSize);
+					segment.size = segment.size - allocSize;
+
+					return allocPointer; // return pointer pointing at the start of the old free segment.
+				}
 			}
+		}finally {
+			removeZeroSegments();
 		}
 
 		return null;
 	}
-	
+
 	/**
 	 * Releases a number of data cells
-	 * 
+	 * freeList will increment by one for every deallocation.
+	 *
 	 * @param p The pointer to release.
 	 */
 	@Override
@@ -79,6 +87,7 @@ public class FirstFit extends Memory {
 		int size = allocatedSegments.get(p);
 		Segment releaseSegment = new Segment(size, p);
 		freeList.push(releaseSegment);
+
 		allocatedSegments.remove(p);
 
 		//overwrite old values in memory with zeros
@@ -86,7 +95,16 @@ public class FirstFit extends Memory {
 		write(p.pointsAt(), zeros);
 
 	}
-	
+
+	public void removeZeroSegments(){
+		for (int i = 0; i < freeList.size(); i++) {
+			Segment segment = freeList.get(i);
+			if (segment.size <= 0){
+				freeList.remove(i);
+			}
+		}
+	}
+
 	/**
 	 * Prints a simple model of the memory. Example:
 	 * 
@@ -98,8 +116,14 @@ public class FirstFit extends Memory {
 	@Override
 	public void printLayout() {
 		// TODO Implement this!
-		freeList.forEach(segment -> System.out.println("Free Memory: " +
-				segment.pointer.pointsAt() + " - " + (segment.pointer.pointsAt() + segment.size)));
+		freeList.forEach(segment -> System.out.println(
+				"Free Memory: " + segment.pointer.pointsAt() + " - " + (segment.pointer.pointsAt() + segment.size) +
+				"\tCells = " + segment.size ));
+
+		//Comes in random order
+		allocatedSegments.forEach((pointer, size) -> System.out.println(
+				"Allocated Memory: " + pointer.pointsAt() + " - " + (pointer.pointsAt() + size) +
+						"\tCells = " + size));
 
 	}
 

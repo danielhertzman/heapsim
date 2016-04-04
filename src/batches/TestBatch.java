@@ -25,7 +25,7 @@ public class TestBatch {
 
     public void run() {
         Memory m = new FirstFit(20); // Swap this for  your own implementation
-        Pointer p1, p2, p3;
+        Pointer p1, p2, p3, p4, p5, p6;
 
         m.printLayout();
         System.out.println("Raw Memory: " + m.toString());
@@ -54,6 +54,18 @@ public class TestBatch {
         p3 = m.alloc(5);
         p3.write(range(1, 5));
         System.out.println("Raw Memory: " + m.toString());
+
+        System.out.println("After allocation");
+        p4 = m.alloc(7);
+        p4.write(range(1, 7));
+        System.out.println("Raw Memory: " + m.toString());
+
+        System.out.println("After Release");
+        m.release(p2);
+        m.printLayout();
+        System.out.println("Raw Memory: " + m.toString());
+
+        m.printLayout();
 
 
         /*
