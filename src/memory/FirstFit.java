@@ -34,6 +34,13 @@ public class FirstFit extends Memory {
 	public Pointer alloc(int size) {
 		// TODO Implement this!
 
+		int currentAdress = 0;
+
+		for (Pointer p : freeList) {
+			if ((p.pointsAt() - currentAdress) > size) {
+				return newPointer(currentAdress, size);
+			}
+		}
 
 		return null;
 	}
@@ -60,6 +67,15 @@ public class FirstFit extends Memory {
 	public void printLayout() {
 		// TODO Implement this!
 		freeList.forEach(pointer -> System.out.println(pointer.read(pointer.pointsAt())));
+	}
+
+	/**
+	 * Method that creats a new pointer
+	 *
+	 */
+
+	public Pointer newPointer(int currentPointer, int size) {
+		return null;
 	}
 
 }
