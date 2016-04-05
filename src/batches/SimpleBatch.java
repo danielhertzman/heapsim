@@ -1,5 +1,6 @@
 package batches;
 
+import memory.BestFit;
 import memory.FirstFit;
 import memory.Memory;
 import memory.Pointer;

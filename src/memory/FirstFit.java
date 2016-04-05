@@ -46,7 +46,7 @@ public class FirstFit extends Memory {
 	 * @return The address of the first cell.
 	 */
 	@Override
-	public Pointer alloc(int allocSize) {
+	public Pointer alloc(int allocSize) throws NullPointerException {
 		// TODO Implement this!
 
 		try {
@@ -96,6 +96,9 @@ public class FirstFit extends Memory {
 
 	}
 
+	/**
+	 * The method removes dummy segments from freeList wich has 0 as length.
+	 */
 	public void removeZeroSegments(){
 		for (int i = 0; i < freeList.size(); i++) {
 			Segment segment = freeList.get(i);
@@ -116,14 +119,22 @@ public class FirstFit extends Memory {
 	@Override
 	public void printLayout() {
 		// TODO Implement this!
-		freeList.forEach(segment -> System.out.println(
-				"Free Memory: " + segment.pointer.pointsAt() + " - " + (segment.pointer.pointsAt() + segment.size) +
-				"\tCells = " + segment.size ));
+		freeList.forEach(segment -> System.out.printf(
+				"%-10s %4d %s %-4d size: %-4d\n",
+				"Free: ",
+				segment.pointer.pointsAt(),
+				"-",
+				(segment.pointer.pointsAt() + segment.size),
+				segment.size ));
 
 		//Comes in random order
-		allocatedSegments.forEach((pointer, size) -> System.out.println(
-				"Allocated Memory: " + pointer.pointsAt() + " - " + (pointer.pointsAt() + size) +
-						"\tCells = " + size));
+		allocatedSegments.forEach((pointer, size) -> System.out.printf(
+				"%-10s %4d %s %-4d size: %-4d\n",
+				"Allocated:",
+				pointer.pointsAt(),
+				"-",
+				(pointer.pointsAt() + size),
+				size));
 
 	}
 
