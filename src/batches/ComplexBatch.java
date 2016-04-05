@@ -36,46 +36,46 @@ public class ComplexBatch {
 			ps[2].write(range(101, 600));
 			ps[3] = m.alloc(200);
 			ps[3].write(range(1, 200));
-			m.release(ps[2]);                            //All fine to here
+			m.release(ps[2]);
 
 			ps[4] = m.alloc(50);
 			ps[4].write(range(51, 100));
 			ps[5] = m.alloc(5);
 			ps[6] = m.alloc(90);
-			ps[6].write(range(5000, 5089));                //free 445-800
+			ps[6].write(range(5000, 5089));
 			m.release(ps[0]);
 
-			ps[7] = m.alloc(60);                        // 60-100, 445-800
+			ps[7] = m.alloc(60);
 			ps[7].write(range(10, 69));
 			m.release(ps[4]);
 
 			ps[8] = m.alloc(45);
-			ps[8].write(range(1, 45));                // 345-350, 60-100, 445-800
+			ps[8].write(range(1, 45));
 			ps[9] = m.alloc(10);
-			ps[9].write(range(16, 25));                // 345-350, 70-100, 445-800
+			ps[9].write(range(16, 25));
 
-			m.release(ps[5]);                        // 350-355, 345-350, 70-100, 445-800
-			m.release(ps[6]);                        // 355-445, 350-355, 345-350, 70-100, 445-800
+			m.release(ps[5]);
+			m.release(ps[6]);
 
 			ps[10] = m.alloc(40);
-			ps[10].write(range(301, 340));        // 395-445, 350-355, 345-350, 70-100, 445-800
+			ps[10].write(range(301, 340));
 			ps[11] = m.alloc(200);
-			ps[11].write(range(1, 200));        // 395-445, 350-355, 345-350, 70-100, 645-800
+			ps[11].write(range(1, 200));
 			ps[12] = m.alloc(35);
-			ps[12].write(range(501, 535));        // 430-445, 350-355, 345-350, 70-100, 645-800
+			ps[12].write(range(501, 535));
 			ps[13] = m.alloc(25);
-			ps[13].write(range(1, 25));            // 430-445, 350-355, 345-350, 95-100, 645-800
+			ps[13].write(range(1, 25));
 			ps[14] = m.alloc(60);
-			ps[14].write(range(1, 60));            // 430-445, 350-355, 345-350, 95-100, 705-800
+			ps[14].write(range(1, 60));
 			ps[15] = m.alloc(60);
-			ps[15].write(range(1, 60));            // 430-445, 350-355, 345-350, 95-100, 765-800
+			ps[15].write(range(1, 60));
 
-			m.release(ps[3]);    // 800-1000, 430-445, 350-355, 345-350, 95-100, 765-800
+			m.release(ps[3]);
 			m.release(ps[13]);
 			m.release(ps[12]);
 
 			ps[16] = m.alloc(170);
-			ps[16].write(range(10001, 10170));//395-430, 70-95, 970-1000, 430-445, 350-355, 345-350, 95-100, 765-800
+			ps[16].write(range(10001, 10170));
 
 			//Problems may occur
 			ps[17] = m.alloc(105);

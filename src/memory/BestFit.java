@@ -42,14 +42,16 @@ public class BestFit extends Memory {
 		try {
 
 			Segment bestFitSegment;
+			//Find the best fitted segment in freelist for allocation.
 			try {
-						bestFitSegment = freeList.stream().
+				bestFitSegment = freeList.stream().
 						filter(segment -> segment.size >= allocSize).
 						sorted(Comparator.comparing(segment -> segment.size)).
 						findFirst().
 						get();
-			}catch (NoSuchElementException ex){
-				System.out.println();
+
+			} catch (NoSuchElementException ex) {
+				System.out.println("No available space");
 				bestFitSegment = null;
 			}
 
@@ -58,8 +60,8 @@ public class BestFit extends Memory {
 			}else {
 
 				//2 following lines for debugging
-				int pointAt = bestFitSegment.pointer.pointsAt();
-				System.out.println("BestFit Segment:" + pointAt + " - " + (pointAt + bestFitSegment.size));
+				//int pointAt = bestFitSegment.pointer.pointsAt();
+				//System.out.println("BestFit Segment:" + pointAt + " - " + (pointAt + bestFitSegment.size));
 
 
 				int oldStartSegmentAdress = bestFitSegment.pointer.pointsAt();
@@ -130,7 +132,7 @@ public class BestFit extends Memory {
 				(segment.pointer.pointsAt() + segment.size),
 				segment.size ));
 
-		//Comes in random order
+		//Comes in random order.
 		allocatedSegments.forEach((pointer, size) -> System.out.printf(
 				"%-10s %4d %s %-4d size: %-4d\n",
 				"Allocated:",
